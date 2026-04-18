@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "rUX+OqHoSQc=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\thank\\OneDrive\\Documents\\New project 2\\AOSharpPluginTemplate\\AOSharpPluginTemplate.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\thank\\.nuget\\packages\\aosharpsdk\\1.0.74\\aosharpsdk.1.0.74.nupkg.sha512",
+    "C:\\Users\\thank\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

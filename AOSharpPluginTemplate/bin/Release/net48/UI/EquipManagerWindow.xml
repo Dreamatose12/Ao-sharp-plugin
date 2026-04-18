@@ -1,0 +1,110 @@
+<?xml version="1.0" standalone="yes"?>
+<root>
+  <BorderView v_alignment="TOP" h_alignment="CENTER" view_layout="vertical" name="EquipManagerRoot" layout_borders="Rect(8,8,8,8)" max_size="Point(16000,-1)">
+    <TextView value="EquipManager" font="BOLD" layout_borders="Rect(4,4,4,4)"/>
+    <TextView value="Saved swaps are rendered as clickable buttons below." layout_borders="Rect(4,0,4,6)"/>
+
+    <BitmapView bitmap_id="GFX_GUI_FRIENDLIST_SPLITTER" layout_borders="Rect(4,4,4,4)"/>
+    <TextView value="Quick Buttons" font="BOLD" layout_borders="Rect(4,4,4,2)"/>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,6)">
+      <Button name="PresetNanoButton" label="Nano Skills" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="PresetArButton" label="Max AR" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="PresetNrButton" label="Max NR" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="SaveCurrentButton" label="Save Current" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="ClearQueueButton" label="Clear Queue"/>
+    </View>
+
+    <BitmapView bitmap_id="GFX_GUI_FRIENDLIST_SPLITTER" layout_borders="Rect(4,4,4,4)"/>
+    <TextView value="Preset Buttons" font="BOLD" layout_borders="Rect(4,4,4,2)"/>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,4)">
+      <Button name="PresetButton1" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="PresetButton2" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="PresetButton3" label="-" layout_borders="Rect(0,0,4,0)"/>
+    </View>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,4)">
+      <Button name="PresetButton4" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="PresetButton5" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="PresetButton6" label="-" layout_borders="Rect(0,0,4,0)"/>
+    </View>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,4)">
+      <Button name="PresetButton7" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="PresetButton8" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="PresetButton9" label="-" layout_borders="Rect(0,0,4,0)"/>
+    </View>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,6)">
+      <Button name="PresetButton10" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="PresetButton11" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="PresetButton12" label="-" layout_borders="Rect(0,0,4,0)"/>
+    </View>
+
+    <BitmapView bitmap_id="GFX_GUI_FRIENDLIST_SPLITTER" layout_borders="Rect(4,4,4,4)"/>
+    <TextView name="SelectedPresetView" value="No preset selected" font="BOLD" layout_borders="Rect(4,4,4,2)"/>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,4)">
+      <Button name="EntryButton1" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton2" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton3" label="-" layout_borders="Rect(0,0,4,0)"/>
+    </View>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,4)">
+      <Button name="EntryButton4" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton5" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton6" label="-" layout_borders="Rect(0,0,4,0)"/>
+    </View>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,4)">
+      <Button name="EntryButton7" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton8" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton9" label="-" layout_borders="Rect(0,0,4,0)"/>
+    </View>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,4)">
+      <Button name="EntryButton10" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton11" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton12" label="-" layout_borders="Rect(0,0,4,0)"/>
+    </View>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,4)">
+      <Button name="EntryButton13" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton14" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton15" label="-" layout_borders="Rect(0,0,4,0)"/>
+    </View>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,4)">
+      <Button name="EntryButton16" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton17" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton18" label="-" layout_borders="Rect(0,0,4,0)"/>
+    </View>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,4)">
+      <Button name="EntryButton19" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton20" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton21" label="-" layout_borders="Rect(0,0,4,0)"/>
+    </View>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,6)">
+      <Button name="EntryButton22" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton23" label="-" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="EntryButton24" label="-"/>
+    </View>
+
+    <BitmapView bitmap_id="GFX_GUI_FRIENDLIST_SPLITTER" layout_borders="Rect(4,4,4,4)"/>
+    <TextView value="Preset Editor" font="BOLD" layout_borders="Rect(4,4,4,2)"/>
+    <TextView value="Preset Name" layout_borders="Rect(4,2,4,1)"/>
+    <TextInputView name="PresetNameInput" min_size="Point(260,16)" max_size="Point(260,16)" layout_borders="Rect(4,0,4,4)"/>
+    <TextView value="Slot" layout_borders="Rect(4,2,4,1)"/>
+    <TextInputView name="SlotInput" min_size="Point(160,16)" max_size="Point(160,16)" layout_borders="Rect(4,0,4,4)"/>
+    <TextView value="Item Name" layout_borders="Rect(4,2,4,1)"/>
+    <TextInputView name="ItemNameInput" min_size="Point(320,16)" max_size="Point(320,16)" layout_borders="Rect(4,0,4,6)"/>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,6)">
+      <Button name="ApplyPresetButton" label="Equip Preset" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="SaveEntryButton" label="Save Entry" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="RemoveSlotButton" label="Remove Slot" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="DeletePresetButton" label="Delete Preset" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="RefreshSummaryButton" label="Refresh"/>
+    </View>
+
+    <BitmapView bitmap_id="GFX_GUI_FRIENDLIST_SPLITTER" layout_borders="Rect(4,4,4,4)"/>
+    <TextView value="Item Search" font="BOLD" layout_borders="Rect(4,4,4,2)"/>
+    <View view_layout="horizontal" layout_borders="Rect(4,0,4,6)">
+      <TextInputView name="FindItemInput" min_size="Point(260,16)" max_size="Point(260,16)" layout_borders="Rect(0,0,4,0)"/>
+      <Button name="FindItemButton" label="Find Item"/>
+    </View>
+
+    <BitmapView bitmap_id="GFX_GUI_FRIENDLIST_SPLITTER" layout_borders="Rect(4,4,4,4)"/>
+    <TextView value="Status" font="BOLD" layout_borders="Rect(4,4,4,2)"/>
+    <TextView name="SummaryView" value="Loading..." min_size="Point(390,88)" max_size="Point(390,88)" layout_borders="Rect(4,0,4,4)"/>
+  </BorderView>
+</root>

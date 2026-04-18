@@ -1,0 +1,52 @@
+{
+  "Sets": {
+    "nanoskills": [
+      {
+        "Slot": "Weap_Hud3",
+        "ItemName": "Research Attunement Device - Nano"
+      },
+      {
+        "Slot": "Weap_Utils3",
+        "ItemName": "Eye of The Psion"
+      },
+      {
+        "Slot": "Weap_Utils2",
+        "ItemName": "Infused Ancient Nano Enhancer"
+      },
+      {
+        "Slot": "Weap_Utils1",
+        "ItemName": "Ancient Nano Enhancer"
+      },
+      {
+        "Slot": "Cloth_Feet",
+        "ItemName": "Sturdy Detention Boots"
+      }
+    ],
+    "maxar": [
+      {
+        "Slot": "Weap_Hud3",
+        "ItemName": "Research Attunement Device - Offense Level Three"
+      },
+      {
+        "Slot": "Cloth_Body",
+        "ItemName": "Combined Commando's Jacket"
+      },
+      {
+        "Slot": "Cloth_Feet",
+        "ItemName": "Combined Commando's Footwear"
+      },
+      {
+        "Slot": "Weap_Utils1",
+        "ItemName": "Alien Combat Directive Controller"
+      },
+      {
+        "Slot": "Weap_Utils2",
+        "ItemName": "Ancient Defender"
+      },
+      {
+        "Slot": "Weap_Utils3",
+        "ItemName": "Dust Brigade Escape Module"
+      }
+    ]
+  }
+}
