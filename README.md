@@ -20,7 +20,7 @@ This repo now includes a working AOSharp plugin project for equipping single ite
 - `/equip <slot> <item name>` equips a specific slot
 - `/equip presets`, `/equip show <name>`, `/equip remove <name> <slot>`, `/equip delete <name>`, `/equip clear`, and `/equip slots` manage presets and the queue
 
-## GUI
+## GUI`
 
 Open the in-game window with `/equip ui` or `/equipmanager`.
 
@@ -64,14 +64,45 @@ After that, bind whichever command you want in AO:
 - `/equip maxar`
 - `/equip maxnr`
 
-## ItemFinder note
+## ItemFinder lookup
 
-The current `find` implementation works in layers:
+The proposed lookup checks inventory as before, then the currently open bank and its open bags, then the already-loaded Mali's Item Finder index for the current character.
 
-- it first checks your inventory
-- then it checks currently open bank contents and can move a matching item into inventory
-- then it asks Mali's Item Finder index where the item was last seen
+For visible bank items, an exact name takes priority over a partial match. Multiple matching copies require manual selection. A transfer is requested only for a single visible match while its bank/source bag is open and inventory has space. Success means one request was sent; check inventory to confirm arrival. Failed requests are not retried automatically.
 
-`/equip scanindex` is a first reflection-based attempt to trigger Mali's scanner directly so the index can be refreshed from inside this plugin.
+Indexed results are advisory. They show the stored name, QL when available, and recorded location, up to ten matches. An index entry never opens a bank/bag or sends a move. When an indexed bag identity matches exactly one currently visible bank bag with a name, that name is shown as a hint. Otherwise the message explains how to open likely bags, retry the full find command, and refresh stale data through ItemFinder's own scan controls.
 
-Right now the ItemFinder bridge can report indexed bank hits, but its public API still does not expose the exact bag name cleanly enough to auto-pull the correct bank bag on its own.
+The inspected local ItemFinder build stores a bag's game identity instance in ItemContainer.ContainerInstance. ItemContainer has no bag-name property. Its Id/ItemContainerId database keys and SlotInstance must not be treated as a bag identity. This was established by read-only inspection of one installed DLL, not a documented cross-version API guarantee. Bag-name hints therefore require subsequent in-game verification and never authorize a transfer.
+
+The lookup reuses ItemFinder's loaded Database. It does not create another Database or automatically scan. Missing initialization, a busy index, an incompatible interface, query failure, and no matches have distinct messages. The adapter validates the reflected method/property shapes and falls back safely when they differ.
+
+The separate /equip scanindex command is unchanged and remains an experimental reflection-based scan path. The new lookup instructions recommend ItemFinder's normal scan controls.
+
+## Offline verification for this proposal
+
+On Windows with the .NET SDK and .NET Framework 4.8 targeting pack installed, open PowerShell in the repository folder and run:
+
+~~~powershell
+dotnet build .\AOSharpPluginTemplate\AOSharpPluginTemplate.csproj -c Release
+dotnet run --project .\Lookup.Tests\Lookup.Tests.csproj -c Release
+~~~
+
+The plugin build uses the existing AOSharpSDK 1.0.74 and Newtonsoft.Json 13.0.3 package references. The offline console tests have no package dependencies and link the actual proposed lookup/safety helper source. Their ItemFinder model/database objects are synthetic fixtures. They do not load ItemFinder, open its database, launch AO, or send game operations.
+
+Expected test summary: 32 passed; 0 failed.
+
+Covered cases include unavailable/busy/incompatible ItemFinder, malformed metadata and exceptions, current-character scoping, query normalization, reuse of the loaded database, bank-root versus bag locations, unique/duplicate/missing bag hints, QL and multiple results, exact/partial visible-bank matches, full inventory, closed source, and no retry after a failed move.
+
+## Subsequent in-game verification
+
+Use a nonessential item and a disposable preset for checks. The user performs the interactive steps.
+
+1. With ItemFinder loaded normally, search an item indexed in a closed bank bag. Confirm the result is advisory and no bag or item moves.
+2. Open the bank while leaving that bag closed. If the bag identity/name is visible, check that the hinted name is the correct bag, including after renaming a bag. Otherwise confirm the fallback instructions are shown.
+3. Open the identified bag, wait for contents to appear, and repeat the exact full item-name search. With one visible match and an empty inventory slot, confirm one transfer request and check that the item actually arrives.
+4. Repeat with two matching copies/QLs visible. Confirm no transfer is sent and manual selection is requested. Repeat with a full inventory and confirm no request.
+5. Move the item manually after indexing, then search again with the relevant contents unavailable. Confirm the message treats the old location as historical. Refresh using ItemFinder's own controls and repeat.
+6. Check a bank-root item, a broad query with several results, ItemFinder unloaded, and an index update in progress.
+7. Verify existing direct inventory search, inventory-bag search, equipment commands, preset save/equip, and remembered/overflow-bag behavior with a disposable preset.
+
+Offline compilation and synthetic tests do not establish live identity correlation, scanner compatibility, AO UI behavior, or server acceptance of transfer requests.

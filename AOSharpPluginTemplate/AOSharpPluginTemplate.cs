@@ -1672,21 +1672,16 @@ namespace EquipManager
                 return;
             }
 
-            if (TryFindOpenBankItem(itemName, out Item bankItem, out Backpack backpack))
+            if (TryHandleVisibleBankLookup(itemName))
             {
-                string backpackName = backpack?.Name ?? "an open bank backpack";
-                Chat.WriteLine($"Found '{bankItem.Name}' in {backpackName}. Moving it to inventory.");
-                TryMoveBankItemToInventory(bankItem);
                 return;
             }
 
-            if (TryLookupItemFinder(itemName, out string locationMessage))
+            IndexLookupResult lookup = TryLookupItemFinder(itemName);
+            foreach (string line in ItemFinderLookup.Describe(lookup, itemName, GetVisibleBankBagHints()))
             {
-                Chat.WriteLine(locationMessage);
-                return;
+                Chat.WriteLine(line);
             }
-
-            Chat.WriteLine($"Could not find '{itemName}' in inventory, open bank bags, or ItemFinder.");
         }
 
         private void HandleScanIndexCommand()
@@ -1700,125 +1695,73 @@ namespace EquipManager
             Chat.WriteLine(message);
         }
 
-        private static bool TryFindOpenBankItem(string itemName, out Item item, out Backpack backpack)
-        {
-            backpack = null;
-            var bank = new Bank();
-
-            item = bank.Items.FirstOrDefault(candidate =>
-                !string.IsNullOrWhiteSpace(candidate.Name) &&
-                candidate.Name.IndexOf(itemName, StringComparison.OrdinalIgnoreCase) >= 0);
-
-            if (item != null)
-            {
-                return true;
-            }
-
-            foreach (Backpack pack in bank.Backpacks)
-            {
-                Item foundItem = pack.Items.FirstOrDefault(candidate =>
-                    !string.IsNullOrWhiteSpace(candidate.Name) &&
-                    candidate.Name.IndexOf(itemName, StringComparison.OrdinalIgnoreCase) >= 0);
-
-                if (foundItem == null)
-                {
-                    continue;
-                }
-
-                item = foundItem;
-                backpack = pack;
-                return true;
-            }
-
-            return false;
-        }
-
-        private static void TryMoveBankItemToInventory(Item item)
+        private static bool TryHandleVisibleBankLookup(string itemName)
         {
             try
             {
-                item.MoveToInventory(Inventory.NumFreeSlots - 1);
-            }
-            catch
-            {
-                item.MoveToInventory(0);
-            }
-        }
+                var bank = new Bank();
+                if (!bank.IsOpen) return false;
 
-        private static bool TryLookupItemFinder(string itemName, out string message)
-        {
-            message = null;
-
-            string toolkitPath = GetItemFinderPath();
-
-            string assemblyPath = Path.Combine(toolkitPath, "Malis Item Finder.dll");
-            if (!File.Exists(assemblyPath))
-            {
-                return false;
-            }
-
-            try
-            {
-                AppDomain.CurrentDomain.AssemblyResolve += ResolveItemFinderAssemblies;
-
-                Assembly assembly = Assembly.LoadFrom(assemblyPath);
-                Type databaseType = assembly.GetType("MalisItemFinder.Database");
-                object database = Activator.CreateInstance(databaseType);
-
-                Type filterCriteriaType = assembly.GetType("FilterCriteria");
-                Type searchCriteriaType = assembly.GetType("SearchCriteria");
-                Type slotType = assembly.GetType("EFDataAccessLibrary.Models.Slot");
-                Type itemInfoType = assembly.GetType("EFDataAccessLibrary.Models.ItemInfo");
-                Type itemContainerType = assembly.GetType("EFDataAccessLibrary.Models.ItemContainer");
-                Type containerIdType = assembly.GetType("ContainerId");
-
-                Type listSearchCriteriaType = typeof(List<>).MakeGenericType(searchCriteriaType);
-                Type dictionaryType = typeof(Dictionary<,>).MakeGenericType(filterCriteriaType, listSearchCriteriaType);
-                object criteria = Activator.CreateInstance(dictionaryType);
-
-                object searchTerms = new[] { itemName };
-                object[] args = { DynelManager.LocalPlayer.Name, searchTerms, criteria, 10, 0 };
-
-                MethodInfo itemLookup = databaseType.GetMethod("ItemLookup");
-                var results = itemLookup.Invoke(database, args) as System.Collections.IEnumerable;
-                object firstSlot = results?.Cast<object>().FirstOrDefault();
-                if (firstSlot == null)
+                var candidates = new List<KeyValuePair<Item, Backpack>>();
+                candidates.AddRange(bank.Items.Where(item => item != null)
+                    .Select(item => new KeyValuePair<Item, Backpack>(item, null)));
+                foreach (Backpack pack in bank.Backpacks.Where(pack => pack != null && pack.IsOpen))
                 {
-                    return false;
+                    candidates.AddRange(pack.Items.Where(item => item != null)
+                        .Select(item => new KeyValuePair<Item, Backpack>(item, pack)));
                 }
 
-                object itemInfo = slotType.GetProperty("ItemInfo").GetValue(firstSlot);
-                object itemContainer = slotType.GetProperty("ItemContainer").GetValue(firstSlot);
-                string foundName = itemInfoType.GetProperty("Name").GetValue(itemInfo) as string;
-                object containerInstance = itemContainerType.GetProperty("ContainerInstance").GetValue(itemContainer);
-                object rootContainer = itemContainerType.GetProperty("Root").GetValue(itemContainer);
-
-                string containerName = Enum.GetName(containerIdType, containerInstance) ?? containerInstance.ToString();
-                string rootName = Enum.GetName(containerIdType, rootContainer) ?? rootContainer.ToString();
-
-                if (string.Equals(containerName, "Bank", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(rootName, "Bank", StringComparison.OrdinalIgnoreCase))
+                var matches = BankLookupSafety.SelectMatches(candidates, pair => pair.Key.Name, itemName);
+                if (matches.Count == 0) return false;
+                if (matches.Count > 1)
                 {
-                    message = $"ItemFinder found '{foundName}' in the bank index, but the exact bag name is not exposed by its public API yet.";
+                    Chat.WriteLine($"Found {matches.Count} visible bank matches for '{itemName}'; no item was moved. Use the full item name or select the desired copy manually.");
                     return true;
                 }
 
-                message = $"ItemFinder found '{foundName}' in {containerName} (root: {rootName}).";
+                Item bankItem = matches[0].Key;
+                Backpack sourceBag = matches[0].Value;
+                string source = sourceBag == null ? "the bank's main slots" :
+                    string.IsNullOrWhiteSpace(sourceBag.Name) ? "an open bank bag" : $"bank bag '{sourceBag.Name}'";
+                // Recheck the source immediately before requesting a move.
+                bool sourceVisible = bank.IsOpen && (sourceBag == null || sourceBag.IsOpen);
+                string moveMessage = BankLookupSafety.RequestMove(sourceVisible, Inventory.NumFreeSlots,
+                    () => bankItem.MoveToInventory());
+                Chat.WriteLine($"Found '{bankItem.Name}' in {source}. {moveMessage}");
                 return true;
             }
             catch (Exception ex)
             {
-                Exception actualException = ex is TargetInvocationException invocationException && invocationException.InnerException != null
-                    ? invocationException.InnerException
-                    : ex;
-
-                message = $"ItemFinder lookup failed: {actualException.Message}";
+                Chat.WriteLine($"Could not complete the visible bank lookup ({ex.GetType().Name}). Check the bank and inventory before retrying.");
                 return true;
             }
-            finally
+        }
+
+        private static List<BankBagHint> GetVisibleBankBagHints()
+        {
+            try
             {
-                AppDomain.CurrentDomain.AssemblyResolve -= ResolveItemFinderAssemblies;
+                var bank = new Bank();
+                if (!bank.IsOpen) return new List<BankBagHint>();
+                // A closed bag's identity/name can be visible in the bank root even
+                // when its contents are unavailable. It is only used for a hint.
+                return bank.Backpacks.Where(pack => pack != null)
+                    .Select(pack => new BankBagHint { Instance = pack.Identity.Instance, Name = pack.Name })
+                    .ToList();
             }
+            catch
+            {
+                // Missing live metadata must not suppress the indexed result or
+                // convert an unverified location into a move request.
+                return new List<BankBagHint>();
+            }
+        }
+
+        private static IndexLookupResult TryLookupItemFinder(string itemName)
+        {
+            Assembly assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(candidate =>
+                string.Equals(candidate.GetName().Name, "Malis Item Finder", StringComparison.OrdinalIgnoreCase));
+            return ItemFinderLookup.Read(assembly, DynelManager.LocalPlayer?.Name, itemName);
         }
 
         private static bool TryStartItemFinderScan(out string message)
