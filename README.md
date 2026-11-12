@@ -89,7 +89,7 @@ dotnet run --project .\Lookup.Tests\Lookup.Tests.csproj -c Release
 
 The plugin build uses the existing AOSharpSDK 1.0.74 and Newtonsoft.Json 13.0.3 package references. The offline console tests have no package dependencies and link the actual proposed lookup/safety helper source. Their ItemFinder model/database objects are synthetic fixtures. They do not load ItemFinder, open its database, launch AO, or send game operations.
 
-Expected test summary: 32 passed; 0 failed.
+Expected test summary: 36 passed; 0 failed.
 
 Covered cases include unavailable/busy/incompatible ItemFinder, malformed metadata and exceptions, current-character scoping, query normalization, reuse of the loaded database, bank-root versus bag locations, unique/duplicate/missing bag hints, QL and multiple results, exact/partial visible-bank matches, full inventory, closed source, and no retry after a failed move.
 
@@ -106,3 +106,13 @@ Use a nonessential item and a disposable preset for checks. The user performs th
 7. Verify existing direct inventory search, inventory-bag search, equipment commands, preset save/equip, and remembered/overflow-bag behavior with a disposable preset.
 
 Offline compilation and synthetic tests do not establish live identity correlation, scanner compatibility, AO UI behavior, or server acceptance of transfer requests.
+
+## Search-results window
+
+The main window's Search button opens a separate read-only results window with Item, QL, Location and Availability columns. Five rows appear per page; Previous and Next navigate the results. Select an item name to see its full stored details. Refresh repeats the current search after opening a bank or bag.
+
+Visible now means the item was observed during that search; it is a snapshot, not a transfer guarantee. Indexed only means the saved location remains unverified. Bank names obtained from index identity correlation are explicitly marked as hints. Indexed rows are retained separately and may repeat visible items. ItemFinder results are limited to ten and the total is displayed; narrow the search when needed. Unknown QL is shown as ?. Blank rows are cleared on each render.
+
+GUI search does not open bags, request moves, or equip items. The /equip find command retains its reviewed behavior. Existing preset controls remain in the original window. The new UI XML is copied by the build and must be distributed alongside EquipManagerWindow.xml.
+
+In-game UI verification remains required: check both windows at your normal resolution/UI scale, long item and bag names, full detail text, empty results, more than five rows, page boundaries, refresh after opening bags, failed/unavailable ItemFinder, closing/reopening the results window, and plugin teardown. No live rendering is claimed by the offline tests.

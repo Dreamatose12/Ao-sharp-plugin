@@ -13,7 +13,7 @@ using Item = AOSharp.Core.Inventory.Item;
 
 namespace EquipManager
 {
-    public class EquipManager : AOPluginEntry
+    public partial class EquipManager : AOPluginEntry
     {
         private static readonly TimeSpan EquipOperationTimeout = TimeSpan.FromSeconds(2);
         private static readonly TimeSpan BagOpenTimeout = TimeSpan.FromSeconds(1.5);
@@ -79,6 +79,7 @@ namespace EquipManager
             _pendingBagOpenState = null;
             _pendingSlotClearState = null;
             _window?.Close();
+            _searchWindow?.Close();
             Chat.WriteLine("EquipManager unloaded.");
         }
 
@@ -638,7 +639,7 @@ namespace EquipManager
                 return;
             }
 
-            HandleFindCommand(new[] { "find", itemName });
+            ShowSearchResults(itemName);
         }
 
         private void HandleSaveCurrentClick(object sender, ButtonBase button)

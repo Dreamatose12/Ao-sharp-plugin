@@ -8,5 +8,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\AOSharpPluginTemplate\ItemFinderLookup.cs" Link="ItemFinderLookup.cs" />
+    <Compile Include="..\AOSharpPluginTemplate\SearchResultRow.cs" Link="SearchResultRow.cs" />
   </ItemGroup>
 </Project>

@@ -61,6 +61,29 @@ internal static class Program
 
     private static void Main()
     {
+        Run("indexed UI row never claims current availability", () => {
+            var row = SearchResultRow.FromIndex(new IndexedLocation { Name = "Relay", Container = "Bank", Root = "Bank" }, new BankBagHint[0]);
+            Equal("Indexed only", row.Availability);
+            Equal("?", row.QualityLevel);
+            Contains(row.Location, "main slots");
+        });
+        Run("UI bag identity match is explicitly a hint", () => {
+            var row = SearchResultRow.FromIndex(new IndexedLocation { Name = "Relay", Container = "123", Root = "Bank", BagInstanceHint = 123, QualityLevel = 200 },
+                new[] { new BankBagHint { Instance = 123, Name = "Gear" } });
+            Equal("200", row.QualityLevel);
+            Equal("Bank / Gear (hint)", row.Location);
+        });
+        Run("ambiguous UI bag identity stays unknown", () => {
+            var row = SearchResultRow.FromIndex(new IndexedLocation { Container = "123", Root = "Bank", BagInstanceHint = 123 },
+                new[] { new BankBagHint { Instance = 123, Name = "A" }, new BankBagHint { Instance = 123, Name = "B" } });
+            Equal("Bank / bag unknown", row.Location);
+        });
+        Run("table clipping preserves original details", () => {
+            var row = new SearchResultRow { Item = "An unusually long item name" };
+            Equal("An unusu...", SearchResultRow.Clip(row.Item, 11));
+            Equal("An unusually long item name", row.Item);
+            Equal("", SearchResultRow.Clip(null, 11));
+        });
         Run("missing ItemFinder is unavailable, not no-match", () =>
             Equal(IndexLookupStatus.Unavailable, ItemFinderLookup.Read(null, "Tester", "Thing").Status));
         Run("unknown interface is incompatible", () =>

@@ -1,0 +1,46 @@
+<?xml version="1.0" standalone="yes"?>
+<root>
+<BorderView view_layout="vertical" layout_borders="Rect(8,8,8,8)">
+<TextView name="SearchTitle" value="Search results" font="BOLD"/>
+<TextView value="Search is read-only. Open the relevant bag and refresh to check availability."/>
+<View view_layout="horizontal">
+<TextView value="Item" font="BOLD" min_size="Point(270,22)" max_size="Point(270,22)"/>
+<TextView value="QL" font="BOLD" min_size="Point(45,22)" max_size="Point(45,22)"/>
+<TextView value="Location" font="BOLD" min_size="Point(240,22)" max_size="Point(240,22)"/>
+<TextView value="Availability" font="BOLD" min_size="Point(180,22)" max_size="Point(180,22)"/>
+</View>
+<View view_layout="horizontal">
+<Button name="SearchItem0" label="-" min_size="Point(270,24)" max_size="Point(270,24)"/>
+<TextView name="SearchQl0" value="" min_size="Point(45,24)" max_size="Point(45,24)"/>
+<TextView name="SearchLocation0" value="" min_size="Point(240,24)" max_size="Point(240,24)"/>
+<TextView name="SearchAvailability0" value="" min_size="Point(180,24)" max_size="Point(180,24)"/>
+</View>
+<View view_layout="horizontal">
+<Button name="SearchItem1" label="-" min_size="Point(270,24)" max_size="Point(270,24)"/>
+<TextView name="SearchQl1" value="" min_size="Point(45,24)" max_size="Point(45,24)"/>
+<TextView name="SearchLocation1" value="" min_size="Point(240,24)" max_size="Point(240,24)"/>
+<TextView name="SearchAvailability1" value="" min_size="Point(180,24)" max_size="Point(180,24)"/>
+</View>
+<View view_layout="horizontal">
+<Button name="SearchItem2" label="-" min_size="Point(270,24)" max_size="Point(270,24)"/>
+<TextView name="SearchQl2" value="" min_size="Point(45,24)" max_size="Point(45,24)"/>
+<TextView name="SearchLocation2" value="" min_size="Point(240,24)" max_size="Point(240,24)"/>
+<TextView name="SearchAvailability2" value="" min_size="Point(180,24)" max_size="Point(180,24)"/>
+</View>
+<View view_layout="horizontal">
+<Button name="SearchItem3" label="-" min_size="Point(270,24)" max_size="Point(270,24)"/>
+<TextView name="SearchQl3" value="" min_size="Point(45,24)" max_size="Point(45,24)"/>
+<TextView name="SearchLocation3" value="" min_size="Point(240,24)" max_size="Point(240,24)"/>
+<TextView name="SearchAvailability3" value="" min_size="Point(180,24)" max_size="Point(180,24)"/>
+</View>
+<View view_layout="horizontal">
+<Button name="SearchItem4" label="-" min_size="Point(270,24)" max_size="Point(270,24)"/>
+<TextView name="SearchQl4" value="" min_size="Point(45,24)" max_size="Point(45,24)"/>
+<TextView name="SearchLocation4" value="" min_size="Point(240,24)" max_size="Point(240,24)"/>
+<TextView name="SearchAvailability4" value="" min_size="Point(180,24)" max_size="Point(180,24)"/>
+</View>
+<View view_layout="horizontal"><Button name="SearchPrevious" label="Previous"/><TextView name="SearchPage" value="" min_size="Point(370,24)"/><Button name="SearchNext" label="Next"/><Button name="SearchRefresh" label="Refresh"/></View>
+<TextView name="SearchDetails" value="" min_size="Point(745,65)" max_size="Point(745,65)"/>
+<TextView name="SearchStatus" value="" min_size="Point(745,95)" max_size="Point(745,95)"/>
+</BorderView>
+</root>

@@ -100,7 +100,7 @@
     <TextView value="Item Search" font="BOLD" layout_borders="Rect(4,4,4,2)"/>
     <View view_layout="horizontal" layout_borders="Rect(4,0,4,6)">
       <TextInputView name="FindItemInput" min_size="Point(260,16)" max_size="Point(260,16)" layout_borders="Rect(0,0,4,0)"/>
-      <Button name="FindItemButton" label="Find Item"/>
+      <Button name="FindItemButton" label="Search"/>
     </View>
 
     <BitmapView bitmap_id="GFX_GUI_FRIENDLIST_SPLITTER" layout_borders="Rect(4,4,4,4)"/>
